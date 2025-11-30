@@ -5,7 +5,6 @@ import dotenv from "dotenv";
 import { engine } from "express-handlebars";
 import { fileURLToPath } from "url";
 import * as bikes from "./bikes.js";
-import fetch from "node-fetch";
 
 dotenv.config();
 
