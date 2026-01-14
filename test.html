@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>LAX Bikeshare – D3 Map</title>
+
+    <!-- D3 (includes d3-fetch via d3.json) -->
+    <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+
+    <style>
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+        font: 14px/1.35 system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      }
+
+      /* Layout */
+      header {
+        padding: 12px 14px;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+
+      header h1 {
+        margin: 0;
+        font-size: 16px;
+        font-weight: 800;
+      }
+
+      .controls {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        flex-wrap: wrap;
+        margin-left: auto;
+      }
+
+      .pill {
+        border: 1px solid rgba(0, 0, 0, 0.12);
+        border-radius: 999px;
+        padding: 6px 10px;
+        background: #fff;
+      }
+
+      input[type="search"] {
+        padding: 8px 10px;
+        border: 1px solid rgba(0, 0, 0, 0.18);
+        border-radius: 10px;
+        min-width: 220px;
+      }
+
+      button {
+        padding: 8px 10px;
+        border: 1px solid rgba(0, 0, 0, 0.18);
+        border-radius: 10px;
+        background: #fff;
+        cursor: pointer;
+      }
+      button:hover {
+        background: #f6f6f6;
+      }
+
+      main {
+        height: calc(100% - 58px);
+        display: grid;
+        grid-template-columns: 1fr;
+      }
+
+      /* Map */
+      #map {
+        position: relative;
+        height: 100%;
+        width: 100%;
+        background: #f3f5f7;
+      }
+
+      svg {
+        width: 100%;
+        height: 100%;
+        display: block;
+      }
+
+      /* Tooltip */
+      .tip {
+        position: absolute;
+        pointer-events: none;
+        background: rgba(0, 0, 0, 0.82);
+        color: #fff;
+        padding: 10px 10px;
+        border-radius: 10px;
+        font-size: 12px;
+        max-width: 320px;
+        line-height: 1.35;
+        display: none;
+      }
+
+      .legend {
+        position: absolute;
+        left: 12px;
+        bottom: 12px;
+        background: rgba(255, 255, 255, 0.95);
+        border: 1px solid rgba(0, 0, 0, 0.12);
+        border-radius: 12px;
+        padding: 10px 12px;
+      }
+      .legend .row {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        margin: 6px 0;
+        white-space: nowrap;
+      }
+      .swatch {
+        width: 14px;
+        height: 14px;
+        border-radius: 999px;
+        border: 1px solid rgba(0, 0, 0, 0.25);
+      }
+
+      .status {
+        color: #444;
+      }
+
+      .error {
+        color: #b00020;
+        padding: 10px 14px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <header>
+      <h1>LAX Bikeshare Map</h1>
+
+      <div class="controls">
+        <span class="pill">Source: <span id="src"></span></span>
+        <span class="pill">Updated: <span id="updated">—</span></span>
+        <input id="search" type="search" placeholder="Filter by station name…" />
+        <button id="refresh">Refresh</button>
+      </div>
+    </header>
+
+    <main>
+      <div id="map">
+        <div class="tip" id="tip"></div>
+        
+        <div class="legend">
+          <div class="row"><span class="swatch" style="background:#ffffff;"></span> Stations</div>
+          <div class="row"><span class="swatch" style="background:#fffbcc;"></span> Hovered</div>
+          <div class="row"><span class="swatch" style="background:#d7f5ff;"></span> Selected</div>
+          <div class="row status"><span class="swatch" style="background:#ffffff;"></span> Size = bikesAvailable</div>
+        </div>
+        
+        <!-- D3 draws into this -->
+        <svg id="svg" viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid meet"></svg>
+      </div>
+      
+      <div class="error" id="error" style="display:none;"></div>
+    </main>
+    <script src="test.js"></script>

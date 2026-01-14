@@ -1,0 +1,15 @@
+{
+  "bird": {
+    "id": "BirdLA",
+    "name": "Bird LA",
+    "gbfs_url": "https://mds.bird.co/gbfs/v2/public/los-angeles/free_bike_status.json"
+  },
+  "metro": {
+    "name": "Metro Bike Share",
+    "url": "https://gbfs.bcycle.com/bcycle_lametro/free_bike_status.json"
+  },
+  "veo": {
+    "name": "Veo LA",
+    "url": "https://cluster-prod.veoride.com/api/shares/name/xla/gbfs"
+  }
+}

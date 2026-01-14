@@ -1,0 +1,21 @@
+{
+    "veo":{
+      "id": "veo",
+      "name": "Veo",
+      "base": "https://cluster-prod.veoride.com/api/shares/name/xla/gbfs",
+      "color": "#00bfff"
+    },
+    "bird":{
+      "id": "bird",
+      "name": "Bird",
+      "color": "#00476a",
+      "base": "https://mds.bird.co/gbfs/v2/public/los-angeles/gbfs.json"
+    },
+    "spin":{
+        "id": "spin",
+      "name": "spin",
+      "color": "#ffA500",
+      "base": "https://mds.bird.co/gbfs/v2/public/provider/spin/los_angeles/gbfs.json"
+
+    }
+}

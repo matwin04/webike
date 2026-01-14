@@ -4,60 +4,67 @@ const map = new maplibregl.Map({
     center: [-118.25, 34.05],
     zoom: 12
 });
+map.addControl(new maplibregl.NavigationControl());
 
-async function loadBikeMarkers() {
-    // Fetch from your own API endpoint
-    const response = await fetch("/api/bikes");
-    const bikes = await response.json(); // array of bike objects
+async function loadSourcesList() {
+    const res = await fetch("/api/sources");
+    if (!res.ok) throw new Error(`Failed to load /api/sources (${res.status})`);
+    const sources = await res.json();
+    return sources?.sources || sources;
+}
 
-    const geojson = {
-        type: "FeatureCollection",
-        features: bikes.map(bike => ({
-            type: "Feature",
-            geometry: {
-                type: "Point",
-                coordinates: [bike.lon, bike.lat]
-            },
-            properties: {
-                bike_id: bike.bike_id,
-                disabled: bike.is_disabled,
-                reserved: bike.is_reserved
-            }
-        }))
-    };
+function addBikeSourceAndLayer(source) {
+    const sourceId = source.id;               // "veo", "bird", etc.
+    const mapSourceId = `bikes-${sourceId}`;  // MapLibre source name
+    const layerId = `bikes-layer-${sourceId}`;
 
-    map.addSource("bikes", { type: "geojson", data: geojson });
+    if (!sourceId) return;
+
+    if (map.getSource(mapSourceId) || map.getLayer(layerId)) return;
+
+    map.addSource(mapSourceId, {
+        type: "geojson",
+        data: `/api/bikes/${sourceId}`
+    });
 
     map.addLayer({
-        id: "bikes-layer",
+        id: layerId,
         type: "circle",
-        source: "bikes",
+        source: mapSourceId,
         paint: {
-            "circle-radius": 6,
-            "circle-color": "#008cff",
+            "circle-radius": 5,
+            "circle-color": source.color,
             "circle-stroke-color": "#ffffff",
             "circle-stroke-width": 2
         }
     });
 
-    map.on("click", "bikes-layer", (e) => {
-        const props = e.features[0].properties;
+    map.on("click", layerId, (e) => {
+        const props = e.features?.[0]?.properties || {};
         new maplibregl.Popup()
             .setLngLat(e.lngLat)
             .setHTML(`
-                <strong>Bike ID:</strong> ${props.bike_id}<br>
-                <strong>Reserved:</strong> ${props.reserved}<br>
-                <strong>Disabled:</strong> ${props.disabled}
-            `)
+        <strong>Source:</strong> ${props.source ?? sourceId}<br>
+        <strong>Bike ID:</strong> ${props.bike_id ?? ""}<br>
+        <strong>Reserved:</strong> ${props.reserved ?? ""}<br>
+        <strong>Disabled:</strong> ${props.disabled ?? ""}<br>
+        <strong>Range:</strong> ${props.range ?? ""}<br></br>
+      `)
             .addTo(map);
     });
 
-    map.on("mouseenter", "bikes-layer", () => {
-        map.getCanvas().style.cursor = "pointer";
-    });
-    map.on("mouseleave", "bikes-layer", () => {
-        map.getCanvas().style.cursor = "";
-    });
+    map.on("mouseenter", layerId, () => (map.getCanvas().style.cursor = "pointer"));
+    map.on("mouseleave", layerId, () => (map.getCanvas().style.cursor = ""));
 }
 
-map.on("load", loadBikeMarkers);
+map.on("load", async () => {
+    const sources = await loadSourcesList();
+    console.log("Loaded sources:", sources);
+
+    // ✅ Works for your object-shaped sources.json
+    const list = Array.isArray(sources) ? sources : Object.values(sources);
+
+    for (const source of list) {
+        addBikeSourceAndLayer(source);
+    }
+});
