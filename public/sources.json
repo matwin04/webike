@@ -16,6 +16,9 @@
       "name": "spin",
       "color": "#ffA500",
       "base": "https://mds.bird.co/gbfs/v2/public/provider/spin/los_angeles/gbfs.json"
-
-    }
+    },
+      "lbbikeshare":{
+        "id":"lb",
+        "color":"#ffA400",
+        "base":"https://www.longbeachbikeshare.com/opendata/gbfs.json"}
 }
