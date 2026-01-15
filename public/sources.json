@@ -17,8 +17,8 @@
       "color": "#ffA500",
       "base": "https://mds.bird.co/gbfs/v2/public/provider/spin/los_angeles/gbfs.json"
     },
-      "lbbikeshare":{
+      "birdculver":{
         "id":"lb",
         "color":"#ffA400",
-        "base":"https://www.longbeachbikeshare.com/opendata/gbfs.json"}
+        "base":"https://mds.bird.co/gbfs/v2/public/culver-city/gbfs.json"}
 }
