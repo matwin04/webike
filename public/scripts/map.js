@@ -12,7 +12,6 @@ async function loadSourcesList() {
     const sources = await res.json();
     return sources?.sources || sources;
 }
-
 function addBikeSourceAndLayer(source) {
     const sourceId = source.id;               // "veo", "bird", etc.
     const mapSourceId = `bikes-${sourceId}`;  // MapLibre source name

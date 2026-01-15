@@ -62,9 +62,36 @@ app.get("/api/birds", async (req, res) => {
     const data = await bikes.getBird();
     res.json(data.data.bikes); // just return the array
 });
+app.get("/api/lime/login", async (req, res) => {
+    const phone = req.query.phone;
+    console.log(phone);
+    if (!phone) return res.status(400).json({ error: "Missing ?phone=..." });
+    if (!phone.startsWith("+")) return res.status(400).json({ error: "Phone must start with + (example: +17145013488)" });
+
+    const encodedPhone = encodeURI(phone);
+    console.log(encodedPhone);
+
+    const url = `https://web-production.lime.bike/api/rider/v1/login?phone=${encodedPhone}`;
+    const response = await fetch(url,{
+        method: "GET",
+    });
+    console.log(response);
+    const data = await response.json();
+    res.json(data);
+})
+app.get("/api/lime/verify", async (req, res) => {
+
+})
 app.get("/about", (req, res) => {
     res.render("about");
 });
+
+//Interaction With Actual Api
+app.get("/lime", (req, res) => {
+    res.render("lime");
+});
+
+
 // START SERVER
 if (!process.env.VERCEL && !process.env.NOW_REGION) {
     const PORT = process.env.PORT || 8088;
