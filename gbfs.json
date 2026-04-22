@@ -11,5 +11,9 @@
   "veo": {
     "name": "Veo LA",
     "url": "https://cluster-prod.veoride.com/api/shares/name/xla/gbfs"
+  },
+  "sflime":{
+    "name":"LIME",
+    "url":"https://data.lime.bike/api/partners/v2/gbfs/san_francisco/gbfs.json"
   }
 }

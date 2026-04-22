@@ -5,6 +5,11 @@
       "base": "https://cluster-prod.veoride.com/api/shares/name/xla/gbfs",
       "color": "#00bfff"
     },
+    "sflime":{
+      "id":"LIME",
+      "color":"#00bfff",
+      "base":"https://data.lime.bike/api/partners/v2/gbfs/san_francisco/gbfs.json"
+    },
     "bird":{
       "id": "bird",
       "name": "Bird",
